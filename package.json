@@ -15,5 +15,8 @@
 	"license": "MIT",
 	"module": "async-iter-duration-at-least.js",
 	"esm": true,
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@jauntywunderkind/tc39-temporal": "^2020.202.0"
+	}
 }
