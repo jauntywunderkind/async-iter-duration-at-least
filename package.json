@@ -2,7 +2,7 @@
 	"name": "async-iter-duration-at-least",
 	"version": "1.0.0",
 	"description": "an async iterator that will insure at least `ms` between ticks",
-	"main": "async-iter-duration-at-least.js",
+	"main": "duration-at-least.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
@@ -13,10 +13,10 @@
 	"keywords": [],
 	"author": "jauntywunderkind",
 	"license": "MIT",
-	"module": "async-iter-duration-at-least.js",
+	"module": "duration-at-least.js",
 	"esm": true,
 	"type": "module",
 	"dependencies": {
-		"@jauntywunderkind/tc39-temporal": "^2020.202.0"
+		"p-defer": "^3.0.0"
 	}
 }

@@ -1,6 +1,3 @@
-import Duration from "@jauntywunderkind/tc39-temporal/lib/temporal.mjs"
-
-export function AsyncIterDurationAtLeast( opt){
-	return this
-}
-export default AsyncIterDurationAtLeast
+export * from "./duration-at-least.js"
+import DurationAtLeast from "./duration-at-least.js"
+export default DurationAtLeast
