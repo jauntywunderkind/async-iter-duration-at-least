@@ -52,3 +52,30 @@ tape( "iterate at a slow rate", async function( t){
 	t.equal( count, 5)
 	t.end()
 })
+
+tape( "iterate in advance", async function( t){
+	//t.plan( 6)
+	const
+		// start a DurationAtLeast
+		durationAtLeast= new DurationAtLeast( 6),
+		iter= durationAtLeast[ Symbol.asyncIterator]() // basically a formality
+
+	// prepare to read in
+	async function read( done= false){
+		const iter= await durationAtLeast.next()
+		t.equal( iter.done, done, `done=${done}`)
+	}
+	// do read ins
+	read()
+	read()
+	read()
+	read()
+	read()
+	read( true)
+
+	// wait some time
+	await Delay( 25)
+	// end iteration
+	durationAtLeast.return()
+	t.end()
+})
