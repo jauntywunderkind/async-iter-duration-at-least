@@ -19,11 +19,11 @@ tape( "iterate as fast as possible", async function( t){
 		t.fail( `should not have failed ${err}`)
 	})
 	// wait some time
-	await Delay( 50)
+	await Delay( 26)
 	// end iteration
 	durationAtLeast.return()
 
-	t.equal( count, 13)
+	t.equal( count, 7)
 	t.end()
 })
 
@@ -45,10 +45,10 @@ tape( "iterate at a slow rate", async function( t){
 		t.fail( `should not have failed ${err}`)
 	})
 	// wait some time
-	await Delay( 50)
+	await Delay( 26)
 	// end iteration
 	durationAtLeast.return()
 
-	t.equal( count, 9)
+	t.equal( count, 5)
 	t.end()
 })
