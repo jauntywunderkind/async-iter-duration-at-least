@@ -1,4 +1,4 @@
-import Defer from "p-defer"
+import Delay from "delay"
 
 export function AsyncIterDurationAtLeast( opt= {}){
 	// upconvert opt to a duration if it's only a number
@@ -7,19 +7,20 @@ export function AsyncIterDurationAtLeast( opt= {}){
 			duration: opt
 		}
 	}
-	Object.assign( this, {
+	Object.defineProperties( this, {
 		/**
 		* duration between iterations will be at least this many ms
 		*/
 		duration: {
-			value: opts.duration|| 1000
+			value: opt.duration|| 1000
 		},
 		/**
 		* call out when the next free tick is
 		* note that this may race far ahead if multiple .next()'s are called
 		*/
 		nextEpoch: {
-			value: 0
+			value: 0,
+			writable: true
 		},
 	})
 	// bind abort
@@ -45,31 +46,33 @@ async function next(){
 
 	const
 		now= Date.now(),
-		newLast= this.lastEpoch+ duration,
-		diff= now- atLeast
-	if( diff< 0){
-		this.lastEpoch= newLast
+		delay= this.nextEpoch- now
+	// there is still time which must pass
+	if( delay> 0){
+		// anyone who comes next needs to wait yet another duration
+		this.nextEpoch+= this.duration
+		// but in the mean time we still have time to wait ourselves
 		// TODO: early return
-		await Delay( diff)
+		await Delay( delay)
+
 		if( this.done){
+			// we got done in the meanwhile
 			return {
 				value: undefined,
 				done: true
 			}
-		}else{
-			return {
-				value: this.state,
-				done: false
-			}
 		}
+		// ok we've waited for a duration to pass
+	}else{
+		// next valid epoch is one duration from now
+		this.nextEpoch= now+ this.duration
 	}
 
-	this.lastEpoch= now
+	// enough time has already passed, so return now
 	return {
-		value: this,
+		value: this.state,
 		done: false
 	}
-
 }
 
 const
@@ -123,6 +126,11 @@ function state(){
 }
 
 AsyncIterDurationAtLeast.prototype= Object.create( null, {
+	[ Symbol.asyncIterator]: {
+		value: function(){
+			return this
+		}
+	},
 	// async iterator methods
 	next: {
 		value: next
@@ -135,7 +143,8 @@ AsyncIterDurationAtLeast.prototype= Object.create( null, {
 	},
 	// abort methods
 	abort: {
-		value: abort
+		value: abort,
+		writable: true
 	},
 	signal: {
 		get: getSignal,
@@ -143,10 +152,11 @@ AsyncIterDurationAtLeast.prototype= Object.create( null, {
 	},
 	// remaining
 	free: {
-		value: free
+		value: free,
+		writable: true
 	},
 	state: {
-		value: state
+		value: state,
+		writable: true
 	}
 })
-

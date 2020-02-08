@@ -4,7 +4,7 @@
 	"description": "an async iterator that will insure at least `ms` between ticks",
 	"main": "duration-at-least.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "./.test/index.js"
 	},
 	"repository": {
 		"type": "git",
@@ -17,6 +17,9 @@
 	"esm": true,
 	"type": "module",
 	"dependencies": {
-		"p-defer": "^3.0.0"
+		"delay": "^4.3.0"
+	},
+	"devDependencies": {
+		"tape": "^4.13.0"
 	}
 }
